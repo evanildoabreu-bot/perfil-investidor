@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise de Perfil de Investidor</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@400;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue-50: #E6F1FB; --blue-200: #85B7EB; --blue-400: #378ADD; --blue-600: #185FA5; --blue-800: #0C447C; --blue-900: #042C53;
+    --teal-50: #E1F5EE; --teal-400: #1D9E75; --teal-600: #0F6E56; --teal-800: #085041;
+    --amber-50: #FAEEDA; --amber-400: #BA7517; --amber-600: #854F0B; --amber-800: #633806;
+    --red-50: #FCEBEB; --red-400: #E24B4A; --red-600: #A32D2D;
+    --gray-50: #F1EFE8; --gray-100: #D3D1C7; --gray-400: #888780; --gray-600: #5F5E5A; --gray-800: #444441;
+    --coral-50: #FAECE7; --coral-400: #D85A30; --coral-600: #993C1D;
+    --green-50: #EAF3DE; --green-600: #3B6D11; --green-800: #27500A;
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --border: rgba(0,0,0,0.10);
+    --border-strong: rgba(0,0,0,0.18);
+    --text: #1A1A18;
+    --text-secondary: #5F5E5A;
+    --text-tertiary: #888780;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-icon {
+    width: 32px; height: 32px;
+    background: var(--blue-50);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .header-icon svg { width: 18px; height: 18px; color: var(--blue-600); }
+  .header-title { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600; color: var(--text); }
+  .header-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 1px; }
+
+  /* Layout */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .container { width: 100%; max-width: 560px; }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 1.5rem; }
+  .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-tertiary); margin-bottom: 8px; }
+  .progress-track { height: 4px; background: var(--gray-100); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--blue-400); border-radius: 2px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .question-num { font-size: 11px; font-weight: 600; color: var(--blue-400); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+  .question-text { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 1.5rem; }
+
+  /* Options */
+  .options-grid { display: flex; flex-direction: column; gap: 8px; }
+  .options-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .option {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color .15s, background .15s, box-shadow .15s;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+  }
+  .option:hover { border-color: var(--blue-200); background: var(--blue-50); }
+  .option.selected { border-color: var(--blue-400); background: var(--blue-50); box-shadow: 0 0 0 3px rgba(55,138,221,.12); }
+  .option.selected .option-icon { background: var(--blue-400); color: #fff; }
+
+  .option-icon {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border-radius: 8px;
+    background: var(--gray-50);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    transition: background .15s, color .15s;
+  }
+  .option-body { flex: 1; min-width: 0; }
+  .option-label { font-size: 14px; font-weight: 500; line-height: 1.3; }
+  .option-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+
+  /* Pills (compact options) */
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    padding: 9px 16px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 13px; font-weight: 500;
+    color: var(--text);
+    transition: border-color .15s, background .15s, box-shadow .15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .pill:hover { border-color: var(--blue-200); background: var(--blue-50); }
+  .pill.selected { border-color: var(--blue-400); background: var(--blue-50); color: var(--blue-800); box-shadow: 0 0 0 3px rgba(55,138,221,.12); }
+
+  /* Multi */
+  .multi-note { font-size: 12px; color: var(--text-tertiary); margin-bottom: 10px; }
+
+  /* Nav */
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+  .btn-back {
+    background: none; border: 1px solid var(--border-strong); border-radius: var(--radius);
+    padding: 10px 20px; font-size: 14px; color: var(--text-secondary); cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: background .15s;
+  }
+  .btn-back:hover { background: var(--gray-50); }
+  .btn-next {
+    background: var(--blue-600); color: #fff; border: none;
+    border-radius: var(--radius); padding: 10px 24px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: background .15s, transform .1s;
+    margin-left: auto;
+  }
+  .btn-next:hover { background: var(--blue-800); }
+  .btn-next:active { transform: scale(.98); }
+
+  .error-msg { font-size: 12px; color: var(--red-600); margin-top: 10px; display: none; }
+  .error-msg.show { display: block; }
+
+  /* ===== RESULTADO ===== */
+  #result { display: none; }
+
+  .result-hero {
+    background: var(--blue-900);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    color: #fff;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;
+  }
+  .result-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; flex-shrink: 0;
+  }
+  .result-label { font-size: 12px; color: rgba(255,255,255,.6); letter-spacing:.04em; text-transform:uppercase; margin-bottom:4px; }
+  .result-name { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 700; }
+  .result-desc { font-size: 13px; color: rgba(255,255,255,.7); margin-top:4px; }
+
+  .tags-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px; border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+  }
+  .tag-warn { background: var(--amber-50); color: var(--amber-800); }
+  .tag-ok { background: var(--teal-50); color: var(--teal-800); }
+  .tag-info { background: var(--blue-50); color: var(--blue-800); }
+  .tag-alert { background: var(--red-50); color: var(--red-600); }
+
+  .alert-box {
+    background: var(--amber-50); border-radius: var(--radius);
+    padding: 14px 16px; font-size: 13px; color: var(--amber-800);
+    display: flex; gap: 10px; align-items: flex-start;
+    margin-bottom: 16px; border: 1px solid rgba(186,117,23,.2);
+    line-height: 1.55;
+  }
+  .alert-box span { font-size: 18px; flex-shrink:0; }
+
+  .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+  .metric-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 4px; }
+  .metric-value { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
+  .metric-value span { font-size: 12px; color: var(--text-tertiary); font-family: 'Inter', sans-serif; font-weight: 400; }
+
+  .section-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-bottom: 16px; }
+  .section-title { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 14px; }
+
+  .dim-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .dim-row:last-child { margin-bottom: 0; }
+  .dim-label { font-size: 13px; color: var(--text-secondary); width: 160px; flex-shrink: 0; }
+  .dim-track { flex: 1; height: 6px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
+  .dim-fill { height: 100%; border-radius: 3px; }
+  .dim-val { font-size: 12px; font-weight: 500; width: 36px; text-align: right; }
+
+  .alloc-bar { height: 12px; border-radius: 6px; overflow: hidden; display: flex; margin: 10px 0 12px; }
+  .alloc-seg { height: 100%; }
+  .alloc-legend { display: flex; flex-wrap: wrap; gap: 10px; }
+  .alloc-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-secondary); }
+  .alloc-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  .products-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .product-col { background: var(--bg); border-radius: var(--radius); padding: 12px; }
+  .product-phase { font-size: 11px; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
+  .product-list { font-size: 13px; color: var(--text); line-height: 1.7; }
+
+  .restart-btn {
+    width: 100%; margin-top: 8px; padding: 13px;
+    background: none; border: 1.5px solid var(--border-strong); border-radius: var(--radius);
+    font-size: 14px; font-weight: 500; color: var(--text-secondary); cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: background .15s;
+  }
+  .restart-btn:hover { background: var(--gray-50); }
+
+  footer {
+    text-align: center;
+    padding: 1.25rem;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  @media (max-width: 520px) {
+    .options-row { grid-template-columns: 1fr; }
+    .metrics-row { grid-template-columns: 1fr 1fr; }
+    .products-grid { grid-template-columns: 1fr; }
+    .result-hero { padding: 1.25rem; }
+    .result-name { font-size: 20px; }
+    .dim-label { width: 120px; font-size: 12px; }
+    .card { padding: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-icon">
+    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path d="M10 2a8 8 0 1 1 0 16A8 8 0 0 1 10 2zm0 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM10 5a.75.75 0 0 1 .75.75v4.19l2.72 1.57a.75.75 0 1 1-.74 1.3l-3-1.73A.75.75 0 0 1 9.25 10V5.75A.75.75 0 0 1 10 5z"/>
+    </svg>
+  </div>
+  <div>
+    <div class="header-title">Análise de Perfil de Investidor</div>
+    <div class="header-sub">Descubra qual é o seu perfil em menos de 3 minutos</div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <!-- QUESTIONÁRIO -->
+    <div id="quiz">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="prog-label">Pergunta 1 de 10</span>
+          <span id="prog-pct">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="question-num" id="q-num">Pergunta 1</div>
+        <div class="question-text" id="q-text"></div>
+        <div id="q-options"></div>
+        <div class="error-msg" id="err-msg">Selecione uma opção para continuar.</div>
+      </div>
+
+      <div class="nav">
+        <button class="btn-back" id="btn-back" style="visibility:hidden" onclick="goBack()">← Voltar</button>
+        <button class="btn-next" id="btn-next" onclick="goNext()">Próxima →</button>
+      </div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="result"></div>
+
+  </div>
+</main>
+
+<footer>
+  Este questionário é educacional e não substitui assessoria de investimentos profissional.
+</footer>
+
+<script>
+const steps = [
+  {
+    name: "objetivo",
+    question: "Qual é o seu principal objetivo ao investir?",
+    type: "cards",
+    options: [
+      { value: "preservar", label: "Preservar capital", sub: "Proteger o que tenho", icon: "🛡️" },
+      { value: "renda", label: "Gerar renda extra", sub: "Complementar minha renda mensal", icon: "💰" },
+      { value: "crescimento", label: "Crescimento no longo prazo", sub: "Acumular patrimônio", icon: "📈" },
+      { value: "enriquecer", label: "Alto retorno", sub: "Maximizar ganhos mesmo com risco", icon: "🚀" }
+    ]
+  },
+  {
+    name: "horizonte",
+    question: "Por quanto tempo você pretende deixar seu dinheiro investido?",
+    type: "pills",
+    options: [
+      { value: "menos_1", label: "Menos de 1 ano" },
+      { value: "1_3", label: "1 a 3 anos" },
+      { value: "3_5", label: "3 a 5 anos" },
+      { value: "mais_5", label: "Mais de 5 anos" }
+    ]
+  },
+  {
+    name: "reacao_queda",
+    question: "Imagine que sua carteira caiu 15% em um mês. O que você faria?",
+    type: "cards",
+    options: [
+      { value: "resgata_tudo", label: "Resgato tudo", sub: "Não consigo dormir perdendo dinheiro", icon: "🚪" },
+      { value: "resgata_parte", label: "Resgato uma parte", sub: "Prefiro reduzir o risco", icon: "⚖️" },
+      { value: "mantenho", label: "Mantenho a posição", sub: "Confio na estratégia de longo prazo", icon: "⚓" },
+      { value: "compra_mais", label: "Compro mais", sub: "Quedas são oportunidades", icon: "🛒" }
+    ]
+  },
+  {
+    name: "experiencia",
+    question: "Como você descreveria sua experiência com investimentos?",
+    type: "cards",
+    options: [
+      { value: "nenhuma", label: "Iniciante", sub: "Nunca investi ou só uso poupança", icon: "🌱" },
+      { value: "basica", label: "Básica", sub: "Conheço renda fixa (CDB, Tesouro)", icon: "📚" },
+      { value: "intermediaria", label: "Intermediária", sub: "Já investi em ações ou FIIs", icon: "📊" },
+      { value: "avancada", label: "Avançada", sub: "Opero derivativos ou investimento no exterior", icon: "🎯" }
+    ]
+  },
+  {
+    name: "percentual_risco",
+    question: "Qual percentual da sua carteira você toparia colocar em ativos de risco (ações, criptos, etc.)?",
+    type: "pills",
+    options: [
+      { value: "0", label: "0% — nada" },
+      { value: "ate_10", label: "Até 10%" },
+      { value: "10_30", label: "10% a 30%" },
+      { value: "30_50", label: "30% a 50%" },
+      { value: "mais_50", label: "Mais de 50%" }
+    ]
+  },
+  {
+    name: "renda_situacao",
+    question: "Como é a sua situação de renda e reserva de emergência?",
+    type: "cards",
+    options: [
+      { value: "sem_reserva", label: "Renda instável", sub: "Sem reserva de emergência", icon: "⚠️" },
+      { value: "reserva_parcial", label: "Renda estável", sub: "Reserva parcial (menos de 6 meses)", icon: "👛" },
+      { value: "reserva_ok", label: "Renda estável", sub: "Reserva completa (6 meses ou mais)", icon: "✅" },
+      { value: "folga", label: "Renda elevada", sub: "Reserva formada e sobra para investir", icon: "💼" }
+    ]
+  },
+  {
+    name: "tolerancia_volatilidade",
+    question: "Você prefere qual tipo de retorno?",
+    type: "cards",
+    options: [
+      { value: "certo_menor", label: "Retorno menor e certo", sub: "Ex: 12% a.a. garantido", icon: "🔒" },
+      { value: "provavel_maior", label: "Retorno provável maior", sub: "Ex: 18% a.a., mas pode ser 10%", icon: "📉" },
+      { value: "alto_risco", label: "Alto potencial de ganho", sub: "Ex: 30% a.a., mas pode perder 10%", icon: "🔥" }
+    ]
+  },
+  {
+    name: "conhecimento_produtos",
+    question: "Quais produtos você conhece ou já utilizou?",
+    type: "multi",
+    options: [
+      { value: "poupanca", label: "Poupança" },
+      { value: "cdb", label: "CDB / LCI / LCA" },
+      { value: "tesouro", label: "Tesouro Direto" },
+      { value: "debentures", label: "Debêntures / CRI / CRA" },
+      { value: "fundos", label: "Fundos de investimento" },
+      { value: "previdencia", label: "Previdência Privada (PGBL/VGBL)" },
+      { value: "fiis", label: "FIIs (fundos imobiliários)" },
+      { value: "acoes", label: "Ações" },
+      { value: "etfs", label: "ETFs (fundos de índice)" },
+      { value: "bdrs", label: "BDRs (ações estrangeiras na B3)" },
+      { value: "coe", label: "COE" },
+      { value: "derivativos", label: "Derivativos / Opções" },
+      { value: "cripto", label: "Criptomoedas" },
+      { value: "defi", label: "Staking / DeFi" },
+      { value: "exterior", label: "Investimentos no exterior" },
+      { value: "private_equity", label: "Private Equity / Venture Capital" }
+    ]
+  },
+  {
+    name: "liquidez",
+    question: "Com que frequência você pode precisar resgatar o dinheiro investido?",
+    type: "pills",
+    options: [
+      { value: "qualquer_momento", label: "A qualquer momento" },
+      { value: "poucos_meses", label: "Em poucos meses" },
+      { value: "1_2_anos", label: "Em 1 a 2 anos" },
+      { value: "nao_precisarei", label: "Não precisarei tão cedo" }
+    ]
+  },
+  {
+    name: "preocupacao",
+    question: "Qual é a sua maior preocupação ao investir?",
+    type: "cards",
+    options: [
+      { value: "perder_dinheiro", label: "Perder dinheiro", sub: "Segurança acima de tudo", icon: "🛡️" },
+      { value: "inflacao", label: "Perder para a inflação", sub: "Quero preservar meu poder de compra", icon: "🏦" },
+      { value: "nao_crescer", label: "Crescer pouco", sub: "Quero superar o CDI com consistência", icon: "⬆️" },
+      { value: "nao_aproveitar", label: "Perder oportunidades", sub: "Quero maximizar retorno", icon: "🎯" }
+    ]
+  }
+];
+
+let current = 0;
+const answers = {};
+
+function renderStep(idx) {
+  const step = steps[idx];
+  const pct = Math.round((idx / steps.length) * 100);
+
+  document.getElementById('prog-label').textContent = `Pergunta ${idx + 1} de ${steps.length}`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('q-num').textContent = `Pergunta ${idx + 1}`;
+  document.getElementById('q-text').textContent = step.question;
+  document.getElementById('err-msg').classList.remove('show');
+
+  const backBtn = document.getElementById('btn-back');
+  backBtn.style.visibility = idx > 0 ? 'visible' : 'hidden';
+
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.textContent = idx === steps.length - 1 ? 'Ver meu perfil →' : 'Próxima →';
+
+  const container = document.getElementById('q-options');
+  container.innerHTML = '';
+
+  if (step.type === 'cards') {
+    const grid = document.createElement('div');
+    grid.className = step.options.length === 3 ? 'options-grid' : 'options-row';
+    step.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option' + (answers[step.name] === opt.value ? ' selected' : '');
+      btn.dataset.value = opt.value;
+      btn.innerHTML = `<div class="option-icon">${opt.icon}</div><div class="option-body"><div class="option-label">${opt.label}</div><div class="option-sub">${opt.sub}</div></div>`;
+      btn.addEventListener('click', () => {
+        grid.querySelectorAll('.option').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        answers[step.name] = opt.value;
+        document.getElementById('err-msg').classList.remove('show');
+      });
+      grid.appendChild(btn);
+    });
+    container.appendChild(grid);
+
+  } else if (step.type === 'pills') {
+    const row = document.createElement('div');
+    row.className = 'pills';
+    step.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'pill' + (answers[step.name] === opt.value ? ' selected' : '');
+      btn.textContent = opt.label;
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.pill').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        answers[step.name] = opt.value;
+        document.getElementById('err-msg').classList.remove('show');
+      });
+      row.appendChild(btn);
+    });
+    container.appendChild(row);
+
+  } else if (step.type === 'multi') {
+    const note = document.createElement('div');
+    note.className = 'multi-note';
+    note.textContent = 'Selecione todos que se aplicam';
+    container.appendChild(note);
+    const row = document.createElement('div');
+    row.className = 'pills';
+    const cur = answers[step.name] || [];
+    step.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'pill' + (cur.includes(opt.value) ? ' selected' : '');
+      btn.textContent = opt.label;
+      btn.addEventListener('click', () => {
+        const idx2 = (answers[step.name] || []).indexOf(opt.value);
+        if (idx2 >= 0) {
+          answers[step.name] = answers[step.name].filter(v => v !== opt.value);
+          btn.classList.remove('selected');
+        } else {
+          answers[step.name] = [...(answers[step.name] || []), opt.value];
+          btn.classList.add('selected');
+        }
+        document.getElementById('err-msg').classList.remove('show');
+      });
+      row.appendChild(btn);
+    });
+    container.appendChild(row);
+  }
+}
+
+function goNext() {
+  const step = steps[current];
+  const isMulti = step.type === 'multi';
+  const hasAnswer = isMulti
+    ? (answers[step.name] && answers[step.name].length > 0)
+    : !!answers[step.name];
+
+  if (!hasAnswer) {
+    const msg = document.getElementById('err-msg');
+    msg.textContent = isMulti ? 'Selecione ao menos uma opção.' : 'Selecione uma opção para continuar.';
+    msg.classList.add('show');
+    return;
+  }
+
+  if (current < steps.length - 1) {
+    current++;
+    renderStep(current);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    showResult();
+  }
+}
+
+function goBack() {
+  if (current > 0) { current--; renderStep(current); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+}
+
+// ===== CÁLCULO DE PERFIL =====
+function calcProfile() {
+  let score = 0;
+
+  const objetivoMap = { preservar: 0, renda: 1, crescimento: 3, enriquecer: 5 };
+  const horizonteMap = { menos_1: 0, '1_3': 1, '3_5': 3, mais_5: 5 };
+  const reacaoMap = { resgata_tudo: 0, resgata_parte: 1, mantenho: 3, compra_mais: 5 };
+  const experienciaMap = { nenhuma: 0, basica: 1, intermediaria: 3, avancada: 5 };
+  const riscoMap = { '0': 0, ate_10: 1, '10_30': 3, '30_50': 4, mais_50: 5 };
+  const rendaMap = { sem_reserva: 0, reserva_parcial: 2, reserva_ok: 4, folga: 5 };
+  const volatMap = { certo_menor: 0, provavel_maior: 3, alto_risco: 5 };
+  const liquidezMap = { qualquer_momento: 0, poucos_meses: 1, '1_2_anos': 3, nao_precisarei: 5 };
+  const preocupacaoMap = { perder_dinheiro: 0, inflacao: 2, nao_crescer: 3, nao_aproveitar: 5 };
+
+  score += (objetivoMap[answers.objetivo] || 0) * 1.5;
+  score += (horizonteMap[answers.horizonte] || 0) * 1.5;
+  score += (reacaoMap[answers.reacao_queda] || 0) * 2;
+  score += (experienciaMap[answers.experiencia] || 0) * 1;
+  score += (riscoMap[answers.percentual_risco] || 0) * 1.5;
+  score += (rendaMap[answers.renda_situacao] || 0) * 2;
+  score += (volatMap[answers.tolerancia_volatilidade] || 0) * 2;
+  score += (liquidezMap[answers.liquidez] || 0) * 1;
+  score += (preocupacaoMap[answers.preocupacao] || 0) * 1;
+
+  const maxScore = (5*1.5)+(5*1.5)+(5*2)+(5*1)+(5*1.5)+(5*2)+(5*2)+(5*1)+(5*1);
+  const pct = (score / maxScore) * 100;
+
+  const semReserva = answers.renda_situacao === 'sem_reserva';
+  const horizCurto = ['menos_1','1_3'].includes(answers.horizonte);
+  const liquidezAlta = ['qualquer_momento','poucos_meses'].includes(answers.liquidez);
+
+  let perfil, emoji, cor, descricao, alocacao, alertas = [];
+
+  if (pct < 25) {
+    perfil = 'Conservador'; emoji = '🛡️'; cor = '#0F6E56';
+    descricao = 'Você prioriza segurança e previsibilidade. Prefere retornos menores com baixo risco de perda.';
+    alocacao = [
+      { label: 'Renda fixa pós-fixada', pct: 70, cor: '#378ADD' },
+      { label: 'Renda fixa IPCA+', pct: 20, cor: '#1D9E75' },
+      { label: 'Multimercado baixo risco', pct: 10, cor: '#BA7517' }
+    ];
+  } else if (pct < 50) {
+    perfil = 'Moderado'; emoji = '📊'; cor = '#185FA5';
+    descricao = 'Você busca um equilíbrio entre segurança e crescimento. Aceita volatilidade moderada para obter retornos superiores.';
+    alocacao = [
+      { label: 'Renda fixa pós-fixada', pct: 50, cor: '#378ADD' },
+      { label: 'Renda fixa IPCA+', pct: 25, cor: '#1D9E75' },
+      { label: 'Multimercado', pct: 15, cor: '#BA7517' },
+      { label: 'Renda variável', pct: 10, cor: '#D85A30' }
+    ];
+  } else if (pct < 75) {
+    perfil = 'Moderado Arrojado'; emoji = '📈'; cor = '#854F0B';
+    descricao = 'Você tem boa tolerância ao risco e busca crescimento acima da média, aceitando oscilações no curto prazo.';
+    alocacao = [
+      { label: 'Renda fixa IPCA+', pct: 30, cor: '#1D9E75' },
+      { label: 'Renda fixa pós-fixada', pct: 25, cor: '#378ADD' },
+      { label: 'Renda variável', pct: 25, cor: '#D85A30' },
+      { label: 'Multimercado', pct: 20, cor: '#BA7517' }
+    ];
+  } else {
+    perfil = 'Arrojado'; emoji = '🚀'; cor = '#993C1D';
+    descricao = 'Você tem alta tolerância ao risco e visa maximizar retornos no longo prazo, mesmo com grandes oscilações.';
+    alocacao = [
+      { label: 'Renda variável', pct: 45, cor: '#D85A30' },
+      { label: 'Renda fixa IPCA+', pct: 25, cor: '#1D9E75' },
+      { label: 'Multimercado', pct: 20, cor: '#BA7517' },
+      { label: 'Renda fixa pós-fixada', pct: 10, cor: '#378ADD' }
+    ];
+  }
+
+  if (semReserva) alertas.push({ tipo: 'warn', msg: 'Atenção: você está sem reserva de emergência. Antes de qualquer investimento, forme de 3 a 6 meses de despesas em liquidez diária (Tesouro Selic ou CDB DI).' });
+  if (horizCurto && liquidezAlta && perfil !== 'Conservador') alertas.push({ tipo: 'info', msg: 'Horizonte curto + liquidez alta: prefira produtos com vencimento compatível. Evite CDBs ou fundos com carência longa.' });
+
+  return { perfil, emoji, cor, descricao, alocacao, alertas, score: Math.round(pct) };
+}
+
+function showResult() {
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+
+  const { perfil, emoji, cor, descricao, alocacao, alertas, score } = calcProfile();
+
+  const semReserva = answers.renda_situacao === 'sem_reserva';
+  const prodCount = (answers.conhecimento_produtos || []).length;
+  const prodSofisticados = ['derivativos','defi','private_equity','coe','bdrs','exterior'];
+  const temProdSofisticado = (answers.conhecimento_produtos || []).some(p => prodSofisticados.includes(p));
+  const expScore = { nenhuma: 20, basica: 40, intermediaria: 65, avancada: 90 }[answers.experiencia] || 50;
+  const horizScore = { menos_1: 20, '1_3': 35, '3_5': 65, mais_5: 90 }[answers.horizonte] || 50;
+  const tolScore = { certo_menor: 15, provavel_maior: 50, alto_risco: 85 }[answers.tolerancia_volatilidade] || 50;
+  const estabScore = { sem_reserva: 10, reserva_parcial: 40, reserva_ok: 75, folga: 95 }[answers.renda_situacao] || 50;
+  const liqScore = { qualquer_momento: 20, poucos_meses: 40, '1_2_anos': 65, nao_precisarei: 90 }[answers.liquidez] || 50;
+
+  const dimColor = (v) => v < 30 ? '#E24B4A' : v < 60 ? '#BA7517' : '#1D9E75';
+
+  const prodAgora = semReserva
+    ? 'Tesouro Selic<br>CDB DI com liquidez diária<br>LCI / LCA curto prazo'
+    : (perfil === 'Conservador' ? 'Tesouro Selic<br>CDB DI<br>LCI / LCA' : 'CDB prefixado<br>Tesouro IPCA+<br>LCI / LCA');
+  const prodMedio = perfil === 'Conservador'
+    ? 'Tesouro IPCA+ curto<br>Fundos DI<br>CDB IPCA+'
+    : 'Fundos multimercado<br>Tesouro IPCA+<br>Debêntures incentivadas';
+  const prodLongo = perfil === 'Conservador'
+    ? 'FIIs tijolo<br>ETFs de renda fixa'
+    : (perfil === 'Arrojado' ? 'Ações (small e large caps)<br>ETFs de renda variável<br>Criptoativos (moderado)' : 'FIIs<br>Ações blue chips<br>ETFs de índice');
+
+  const alertsHtml = alertas.map(a => `
+    <div class="alert-box">
+      <span>${a.tipo === 'warn' ? '⚠️' : 'ℹ️'}</span>
+      <div>${a.msg}</div>
+    </div>`).join('');
+
+  const allocBar = alocacao.map(a => `<div class="alloc-seg" style="width:${a.pct}%;background:${a.cor}"></div>`).join('');
+  const allocLegend = alocacao.map(a => `<div class="alloc-item"><div class="alloc-dot" style="background:${a.cor}"></div>${a.label} ${a.pct}%</div>`).join('');
+
+  const tagsHtml = [
+    `<span class="tag tag-info">🕐 Horizonte: ${answers.horizonte === 'menos_1' ? '< 1 ano' : answers.horizonte === '1_3' ? '1–3 anos' : answers.horizonte === '3_5' ? '3–5 anos' : '5+ anos'}</span>`,
+    semReserva ? `<span class="tag tag-alert">⚠️ Sem reserva de emergência</span>` : `<span class="tag tag-ok">✅ Reserva formada</span>`,
+  ].join('');
+
+  document.getElementById('result').innerHTML = `
+    <div class="result-hero">
+      <div class="result-avatar">${emoji}</div>
+      <div>
+        <div class="result-label">Seu perfil de investidor</div>
+        <div class="result-name">${perfil}</div>
+        <div class="result-desc">${descricao}</div>
+      </div>
+    </div>
+
+    <div class="tags-row">${tagsHtml}</div>
+
+    ${alertsHtml}
+
+    <div class="metrics-row">
+      <div class="metric"><div class="metric-label">Pontuação de risco</div><div class="metric-value">${score} <span>/ 100</span></div></div>
+      <div class="metric"><div class="metric-label">Tolerância à volatilidade</div><div class="metric-value" style="font-size:15px;padding-top:4px">${answers.tolerancia_volatilidade === 'certo_menor' ? 'Baixa' : answers.tolerancia_volatilidade === 'provavel_maior' ? 'Média' : 'Alta'}</div></div>
+      <div class="metric"><div class="metric-label">Produtos conhecidos</div><div class="metric-value">${prodCount} <span>/ 16</span></div><div style="font-size:11px;color:var(--text-tertiary);margin-top:3px">${temProdSofisticado ? '⭐ inclui sofisticados' : 'básico a intermediário'}</div></div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">Dimensões do seu perfil</div>
+      <div class="dim-row">
+        <div class="dim-label">Tolerância ao risco</div>
+        <div class="dim-track"><div class="dim-fill" style="width:${score}%;background:${dimColor(score)}"></div></div>
+        <div class="dim-val" style="color:${dimColor(score)}">${score}%</div>
+      </div>
+      <div class="dim-row">
+        <div class="dim-label">Horizonte de tempo</div>
+        <div class="dim-track"><div class="dim-fill" style="width:${horizScore}%;background:${dimColor(horizScore)}"></div></div>
+        <div class="dim-val" style="color:${dimColor(horizScore)}">${horizScore}%</div>
+      </div>
+      <div class="dim-row">
+        <div class="dim-label">Experiência</div>
+        <div class="dim-track"><div class="dim-fill" style="width:${expScore}%;background:${dimColor(expScore)}"></div></div>
+        <div class="dim-val" style="color:${dimColor(expScore)}">${expScore}%</div>
+      </div>
+      <div class="dim-row">
+        <div class="dim-label">Estabilidade financeira</div>
+        <div class="dim-track"><div class="dim-fill" style="width:${estabScore}%;background:${dimColor(estabScore)}"></div></div>
+        <div class="dim-val" style="color:${dimColor(estabScore)}">${estabScore}%</div>
+      </div>
+      <div class="dim-row" style="margin-bottom:0">
+        <div class="dim-label">Liquidez disponível</div>
+        <div class="dim-track"><div class="dim-fill" style="width:${liqScore}%;background:${dimColor(liqScore)}"></div></div>
+        <div class="dim-val" style="color:${dimColor(liqScore)}">${liqScore}%</div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">Alocação sugerida para seu perfil</div>
+      <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:2px">Sugestão baseada no seu horizonte e tolerância</div>
+      <div class="alloc-bar">${allocBar}</div>
+      <div class="alloc-legend">${allocLegend}</div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">Produtos compatíveis</div>
+      <div class="products-grid">
+        <div class="product-col">
+          <div class="product-phase" style="color:var(--blue-600)">Agora</div>
+          <div class="product-list">${prodAgora}</div>
+        </div>
+        <div class="product-col">
+          <div class="product-phase" style="color:var(--green-600)">Médio prazo</div>
+          <div class="product-list">${prodMedio}</div>
+        </div>
+        <div class="product-col">
+          <div class="product-phase" style="color:var(--amber-600)">Longo prazo</div>
+          <div class="product-list">${prodLongo}</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="restart-btn" onclick="restart()">↺ Refazer o questionário</button>
+  `;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() {
+  current = 0;
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('result').innerHTML = '';
+  document.getElementById('quiz').style.display = 'block';
+  renderStep(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+renderStep(0);
+</script>
+</body>
+</html>
