@@ -997,7 +997,7 @@ function saveToGoogleSheets(perfil, score, alertas) {
     'Alertas': alertas_calc.map(a => a.msg).join(' | ')
   };
 
-  const apiUrl = 'https://script.google.com/macros/s/AKfycbwULfUAWM55JOs9HwJXzj0y2nMIsxfk7u5Ragzygqf2G8lXvhG_vX0fEgMIGX45LTGn/exec';
+  const apiUrl = 'https://script.google.com/macros/s/AKfycbxWdVDLQmUJtRqGN6VsFKTDe_rK-TgvGmDM2dQXHDhFF-ZAr4G-XVf3gcuPPYOMDsOE/exec';
 
   fetch(apiUrl, {
     method: 'POST',
