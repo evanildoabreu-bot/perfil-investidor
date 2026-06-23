@@ -227,6 +227,54 @@
   .product-phase { font-size: 11px; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
   .product-list { font-size: 13px; color: var(--text); line-height: 1.7; }
 
+  /* ===== DADOS DO CLIENTE ===== */
+  #dados-cliente { display: block; }
+  .client-hero {
+    text-align: center;
+    padding: 2rem 0 1.5rem;
+  }
+  .client-hero-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: var(--blue-50); margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+  }
+  .client-hero h1 { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .client-hero p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+  .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; }
+  .form-group:last-of-type { margin-bottom: 0; }
+  .form-label {
+    font-size: 13px; font-weight: 500; color: var(--text);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .form-label .required { color: var(--red-400); font-size: 11px; }
+  .form-input {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    font-size: 14px; font-family: 'Inter', sans-serif;
+    color: var(--text); background: var(--surface);
+    transition: border-color .15s, box-shadow .15s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--blue-400); box-shadow: 0 0 0 3px rgba(55,138,221,.12); }
+  .form-input.error { border-color: var(--red-400); }
+  .form-input::placeholder { color: var(--text-tertiary); }
+  .form-hint { font-size: 11px; color: var(--text-tertiary); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-error { font-size: 12px; color: var(--red-600); margin-top: 2px; display: none; }
+  .form-error.show { display: block; }
+  .privacy-note {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: var(--blue-50); border-radius: var(--radius);
+    padding: 12px 14px; font-size: 12px; color: var(--blue-800);
+    margin-top: 16px; line-height: 1.5;
+  }
+  @media (max-width: 520px) {
+    .form-row { grid-template-columns: 1fr; }
+  }
+
   .restart-btn {
     width: 100%; margin-top: 8px; padding: 13px;
     background: none; border: 1.5px solid var(--border-strong); border-radius: var(--radius);
@@ -272,8 +320,58 @@
 <main>
   <div class="container">
 
+    <!-- DADOS DO CLIENTE -->
+    <div id="dados-cliente">
+      <div class="client-hero">
+        <div class="client-hero-icon">📋</div>
+        <h1>Análise de Perfil de Investidor</h1>
+        <p>Preencha seus dados para começar.<br>O questionário leva menos de 3 minutos.</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label" for="f-nome">Nome completo <span class="required">obrigatório</span></label>
+          <input class="form-input" type="text" id="f-nome" placeholder="Ex: João da Silva" autocomplete="name">
+          <div class="form-error" id="err-nome">Por favor, informe seu nome completo.</div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-cpf">CPF <span class="required">obrigatório</span></label>
+            <input class="form-input" type="text" id="f-cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off">
+            <div class="form-error" id="err-cpf">CPF inválido.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-nascimento">Data de nascimento</label>
+            <input class="form-input" type="date" id="f-nascimento" autocomplete="bday">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-email">E-mail <span class="required">obrigatório</span></label>
+            <input class="form-input" type="email" id="f-email" placeholder="seu@email.com" autocomplete="email">
+            <div class="form-error" id="err-email">E-mail inválido.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-telefone">Telefone / WhatsApp</label>
+            <input class="form-input" type="tel" id="f-telefone" placeholder="(11) 90000-0000" maxlength="15" autocomplete="tel">
+          </div>
+        </div>
+
+        <div class="privacy-note">
+          🔒 Seus dados são utilizados apenas para identificação do perfil e não serão compartilhados com terceiros.
+        </div>
+      </div>
+
+      <div class="nav">
+        <span></span>
+        <button class="btn-next" onclick="iniciarQuiz()">Começar questionário →</button>
+      </div>
+    </div>
+
     <!-- QUESTIONÁRIO -->
-    <div id="quiz">
+    <div id="quiz" style="display:none">
       <div class="progress-wrap">
         <div class="progress-meta">
           <span id="prog-label">Pergunta 1 de 10</span>
@@ -306,6 +404,84 @@
 </footer>
 
 <script>
+const cliente = { nome: '', cpf: '', email: '', telefone: '', nascimento: '' };
+
+function maskCPF(v) {
+  v = v.replace(/\D/g,'').slice(0,11);
+  if (v.length > 9) return v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
+  if (v.length > 6) return v.replace(/(\d{3})(\d{3})(\d+)/,'$1.$2.$3');
+  if (v.length > 3) return v.replace(/(\d{3})(\d+)/,'$1.$2');
+  return v;
+}
+function maskTel(v) {
+  v = v.replace(/\D/g,'').slice(0,11);
+  if (v.length > 10) return v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+  if (v.length > 6) return v.replace(/(\d{2})(\d{4})(\d+)/,'($1) $2-$3');
+  if (v.length > 2) return v.replace(/(\d{2})(\d+)/,'($1) $2');
+  return v;
+}
+function validCPF(c) {
+  c = c.replace(/\D/g,'');
+  if (c.length !== 11 || /^(\d)\1+$/.test(c)) return false;
+  let s = 0;
+  for (let i = 0; i < 9; i++) s += +c[i] * (10 - i);
+  let r = (s * 10) % 11; if (r === 10 || r === 11) r = 0;
+  if (r !== +c[9]) return false;
+  s = 0;
+  for (let i = 0; i < 10; i++) s += +c[i] * (11 - i);
+  r = (s * 10) % 11; if (r === 10 || r === 11) r = 0;
+  return r === +c[10];
+}
+
+document.getElementById('f-cpf').addEventListener('input', function() {
+  this.value = maskCPF(this.value);
+});
+document.getElementById('f-telefone').addEventListener('input', function() {
+  this.value = maskTel(this.value);
+});
+
+function iniciarQuiz() {
+  const nome = document.getElementById('f-nome').value.trim();
+  const cpf = document.getElementById('f-cpf').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  let ok = true;
+
+  document.getElementById('err-nome').classList.remove('show');
+  document.getElementById('err-cpf').classList.remove('show');
+  document.getElementById('err-email').classList.remove('show');
+  document.getElementById('f-nome').classList.remove('error');
+  document.getElementById('f-cpf').classList.remove('error');
+  document.getElementById('f-email').classList.remove('error');
+
+  if (nome.length < 3) {
+    document.getElementById('err-nome').classList.add('show');
+    document.getElementById('f-nome').classList.add('error');
+    ok = false;
+  }
+  if (!validCPF(cpf)) {
+    document.getElementById('err-cpf').classList.add('show');
+    document.getElementById('f-cpf').classList.add('error');
+    ok = false;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('err-email').classList.add('show');
+    document.getElementById('f-email').classList.add('error');
+    ok = false;
+  }
+  if (!ok) return;
+
+  cliente.nome = nome;
+  cliente.cpf = cpf;
+  cliente.email = email;
+  cliente.telefone = document.getElementById('f-telefone').value.trim();
+  cliente.nascimento = document.getElementById('f-nascimento').value;
+
+  document.getElementById('dados-cliente').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderStep(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 const steps = [
   {
     name: "objetivo",
@@ -663,7 +839,27 @@ function showResult() {
     semReserva ? `<span class="tag tag-alert">⚠️ Sem reserva de emergência</span>` : `<span class="tag tag-ok">✅ Reserva formada</span>`,
   ].join('');
 
+  const nascFormatado = cliente.nascimento
+    ? new Date(cliente.nascimento + 'T00:00:00').toLocaleDateString('pt-BR')
+    : null;
+
   document.getElementById('result').innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <div style="width:46px;height:46px;border-radius:50%;background:var(--blue-50);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">👤</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--text)">${cliente.nome}</div>
+        <div style="font-size:12px;color:var(--text-tertiary);margin-top:3px;display:flex;flex-wrap:wrap;gap:10px;">
+          <span>📧 ${cliente.email}</span>
+          ${cliente.telefone ? `<span>📱 ${cliente.telefone}</span>` : ''}
+          ${nascFormatado ? `<span>🎂 ${nascFormatado}</span>` : ''}
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text-tertiary);text-align:right;flex-shrink:0;">
+        CPF: ${cliente.cpf}<br>
+        <span style="font-size:10px;">${new Date().toLocaleDateString('pt-BR')}</span>
+      </div>
+    </div>
+
     <div class="result-hero">
       <div class="result-avatar">${emoji}</div>
       <div>
@@ -748,8 +944,8 @@ function restart() {
   Object.keys(answers).forEach(k => delete answers[k]);
   document.getElementById('result').style.display = 'none';
   document.getElementById('result').innerHTML = '';
-  document.getElementById('quiz').style.display = 'block';
-  renderStep(0);
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('dados-cliente').style.display = 'block';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
