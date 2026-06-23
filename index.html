@@ -832,7 +832,6 @@ function showResult() {
   document.getElementById('result').style.display = 'block';
 
   const { perfil, emoji, cor, descricao, alocacao, alertas, score } = calcProfile();
-  sendToSheets(perfil, score);
 
   const semReserva = answers.renda_situacao === 'sem_reserva';
   const prodCount = (answers.conhecimento_produtos || []).length;
@@ -973,7 +972,7 @@ function showResult() {
 }
 
 function saveToGoogleSheets(perfil, score, alertas) {
-  const { perfil: perfil_calc, emoji, cor, descricao, alocacao, alertas: alertas_calc, score: score_calc } = calcProfile();
+  const { perfil: perfil_calc, alertas: alertas_calc, score: score_calc } = calcProfile();
 
   const dados = {
     'Data/Hora': new Date().toLocaleString('pt-BR'),
@@ -998,12 +997,9 @@ function saveToGoogleSheets(perfil, score, alertas) {
   };
 
   const apiUrl = 'https://script.google.com/macros/s/AKfycbx5DblPyefsf4Sz9bDbGMK8f0QV9bv9P7Ys_KnHaHFFLJ_g6Lup6eP_KeX5RNv1SP67/exec';
-
   fetch(apiUrl + '?data=' + encodeURIComponent(JSON.stringify(dados)), {
-          mode: 'no-cors'
-        }).catch(error => {
-    console.error('❌ Erro:', error);
-  });
+    mode: 'no-cors'
+  }).catch(error => { console.error('❌ Erro:', error); });
 }
 
 function restart() {
