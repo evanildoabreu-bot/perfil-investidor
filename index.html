@@ -797,11 +797,42 @@ function calcProfile() {
   return { perfil, emoji, cor, descricao, alocacao, alertas, score: Math.round(pct) };
 }
 
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywfDG1CqSRAL9LhFgx41E7UT3ZDCpl8T6leBVFa5SHld2PSe73XUfZaF6PhaAHMfdc/exec';
+
+function sendToSheets(perfil, score) {
+  const payload = {
+    nome: cliente.nome || '',
+    cpf: cliente.cpf || '',
+    email: cliente.email || '',
+    telefone: cliente.telefone || '',
+    nascimento: cliente.nascimento || '',
+    q1: answers.objetivo || '',
+    q2: answers.horizonte || '',
+    q3: answers.reacao_queda || '',
+    q4: answers.experiencia || '',
+    q5: answers.percentual_risco || '',
+    q6: answers.renda_situacao || '',
+    q7: answers.tolerancia_volatilidade || '',
+    q8: answers.liquidez || '',
+    q9: answers.preocupacao || '',
+    q10: (answers.conhecimento_produtos || []).join(', '),
+    pontuacao: score,
+    perfil: perfil
+  };
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(err => console.warn('Erro ao salvar no Sheets:', err));
+}
+
 function showResult() {
   document.getElementById('quiz').style.display = 'none';
   document.getElementById('result').style.display = 'block';
 
   const { perfil, emoji, cor, descricao, alocacao, alertas, score } = calcProfile();
+  sendToSheets(perfil, score);
 
   const semReserva = answers.renda_situacao === 'sem_reserva';
   const prodCount = (answers.conhecimento_produtos || []).length;
@@ -937,6 +968,48 @@ function showResult() {
   `;
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  saveToGoogleSheets(perfil, score, alertas);
+}
+
+function saveToGoogleSheets(perfil, score, alertas) {
+  const { perfil: perfil_calc, emoji, cor, descricao, alocacao, alertas: alertas_calc, score: score_calc } = calcProfile();
+
+  const dados = {
+    'Data/Hora': new Date().toLocaleString('pt-BR'),
+    'Nome': cliente.nome,
+    'CPF': cliente.cpf,
+    'Email': cliente.email,
+    'Telefone': cliente.telefone,
+    'Data de Nascimento': cliente.nascimento,
+    'P1 - Objetivo': answers.objetivo || '',
+    'P2 - Horizonte': answers.horizonte || '',
+    'P3 - Reação à Queda': answers.reacao_queda || '',
+    'P4 - Experiência': answers.experiencia || '',
+    'P5 - Percentual de Risco': answers.percentual_risco || '',
+    'P6 - Renda/Situação': answers.renda_situacao || '',
+    'P7 - Tolerância Volatilidade': answers.tolerancia_volatilidade || '',
+    'P8 - Conhecimento Produtos': (answers.conhecimento_produtos || []).join(', '),
+    'P9 - Liquidez': answers.liquidez || '',
+    'P10 - Preocupação': answers.preocupacao || '',
+    'Perfil Calculado': perfil_calc,
+    'Pontuação': score_calc,
+    'Alertas': alertas_calc.map(a => a.msg).join(' | ')
+  };
+
+  const apiUrl = 'https://script.google.com/macros/s/AKfycby85NtLkiATENWrmqFXG97bF-ZMBWctKV8WvcbpWrK4Zi4Ab9zflY3mb-hVTchSzDG/userweb';
+
+  fetch(apiUrl, {
+    method: 'POST',
+    body: JSON.stringify(dados)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('✅ Dados salvos:', data);
+  })
+  .catch(error => {
+    console.error('❌ Erro:', error);
+  });
 }
 
 function restart() {
