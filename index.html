@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AnÃ¡lise de Perfil de Investidor</title>
+<title>Análise de Perfil de Investidor</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@400;600;700&display=swap');
 
@@ -312,8 +312,8 @@
     </svg>
   </div>
   <div>
-    <div class="header-title">AnÃ¡lise de Perfil de Investidor</div>
-    <div class="header-sub">Descubra qual Ã© o seu perfil em menos de 3 minutos</div>
+    <div class="header-title">Análise de Perfil de Investidor</div>
+    <div class="header-sub">Descubra qual é o seu perfil em menos de 3 minutos</div>
   </div>
 </header>
 
@@ -323,23 +323,23 @@
     <!-- DADOS DO CLIENTE -->
     <div id="dados-cliente">
       <div class="client-hero">
-        <div class="client-hero-icon">ð</div>
-        <h1>AnÃ¡lise de Perfil de Investidor</h1>
-        <p>Preencha seus dados para comeÃ§ar.<br>O questionÃ¡rio leva menos de 3 minutos.</p>
+        <div class="client-hero-icon">📋</div>
+        <h1>Análise de Perfil de Investidor</h1>
+        <p>Preencha seus dados para começar.<br>O questionário leva menos de 3 minutos.</p>
       </div>
 
       <div class="card">
         <div class="form-group">
-          <label class="form-label" for="f-nome">Nome completo <span class="required">obrigatÃ³rio</span></label>
-          <input class="form-input" type="text" id="f-nome" placeholder="Ex: JoÃ£o da Silva" autocomplete="name">
+          <label class="form-label" for="f-nome">Nome completo <span class="required">obrigatório</span></label>
+          <input class="form-input" type="text" id="f-nome" placeholder="Ex: João da Silva" autocomplete="name">
           <div class="form-error" id="err-nome">Por favor, informe seu nome completo.</div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="f-cpf">CPF <span class="required">obrigatÃ³rio</span></label>
+            <label class="form-label" for="f-cpf">CPF <span class="required">obrigatório</span></label>
             <input class="form-input" type="text" id="f-cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off">
-            <div class="form-error" id="err-cpf">CPF invÃ¡lido.</div>
+            <div class="form-error" id="err-cpf">CPF inválido.</div>
           </div>
           <div class="form-group">
             <label class="form-label" for="f-nascimento">Data de nascimento</label>
@@ -349,9 +349,9 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="f-email">E-mail <span class="required">obrigatÃ³rio</span></label>
+            <label class="form-label" for="f-email">E-mail <span class="required">obrigatório</span></label>
             <input class="form-input" type="email" id="f-email" placeholder="seu@email.com" autocomplete="email">
-            <div class="form-error" id="err-email">E-mail invÃ¡lido.</div>
+            <div class="form-error" id="err-email">E-mail inválido.</div>
           </div>
           <div class="form-group">
             <label class="form-label" for="f-telefone">Telefone / WhatsApp</label>
@@ -360,17 +360,17 @@
         </div>
 
         <div class="privacy-note">
-          ð Seus dados sÃ£o utilizados apenas para identificaÃ§Ã£o do perfil e nÃ£o serÃ£o compartilhados com terceiros.
+          🔒 Seus dados são utilizados apenas para identificação do perfil e não serão compartilhados com terceiros.
         </div>
       </div>
 
       <div class="nav">
         <span></span>
-        <button class="btn-next" onclick="iniciarQuiz()">ComeÃ§ar questionÃ¡rio â</button>
+        <button class="btn-next" onclick="iniciarQuiz()">Começar questionário →</button>
       </div>
     </div>
 
-    <!-- QUESTIONÃRIO -->
+    <!-- QUESTIONÁRIO -->
     <div id="quiz" style="display:none">
       <div class="progress-wrap">
         <div class="progress-meta">
@@ -384,12 +384,12 @@
         <div class="question-num" id="q-num">Pergunta 1</div>
         <div class="question-text" id="q-text"></div>
         <div id="q-options"></div>
-        <div class="error-msg" id="err-msg">Selecione uma opÃ§Ã£o para continuar.</div>
+        <div class="error-msg" id="err-msg">Selecione uma opção para continuar.</div>
       </div>
 
       <div class="nav">
-        <button class="btn-back" id="btn-back" style="visibility:hidden" onclick="goBack()">â Voltar</button>
-        <button class="btn-next" id="btn-next" onclick="goNext()">PrÃ³xima â</button>
+        <button class="btn-back" id="btn-back" style="visibility:hidden" onclick="goBack()">← Voltar</button>
+        <button class="btn-next" id="btn-next" onclick="goNext()">Próxima →</button>
       </div>
     </div>
 
@@ -400,7 +400,7 @@
 </main>
 
 <footer>
-  Este questionÃ¡rio Ã© educacional e nÃ£o substitui assessoria de investimentos profissional.
+  Este questionário é educacional e não substitui assessoria de investimentos profissional.
 </footer>
 
 <script>
@@ -421,9 +421,8 @@ function maskTel(v) {
   return v;
 }
 function validCPF(c) {
-  if (c.replace(/D/g,'') === '11111111111') return true;
-  if (c.replace(/\D/g,'') === '11111111111') return true; // CPF teste
   c = c.replace(/\D/g,'');
+  if (c === '11111111111') return true; // CPF de teste
   if (c.length !== 11 || /^(\d)\1+$/.test(c)) return false;
   let s = 0;
   for (let i = 0; i < 9; i++) s += +c[i] * (10 - i);
@@ -487,18 +486,18 @@ function iniciarQuiz() {
 const steps = [
   {
     name: "objetivo",
-    question: "Qual Ã© o seu principal objetivo ao investir?",
+    question: "Qual é o seu principal objetivo ao investir?",
     type: "cards",
     options: [
-      { value: "preservar", label: "Preservar capital", sub: "Proteger o que tenho", icon: "ð¡ï¸" },
-      { value: "renda", label: "Gerar renda extra", sub: "Complementar minha renda mensal", icon: "ð°" },
-      { value: "crescimento", label: "Crescimento no longo prazo", sub: "Acumular patrimÃ´nio", icon: "ð" },
-      { value: "enriquecer", label: "Alto retorno", sub: "Maximizar ganhos mesmo com risco", icon: "ð" }
+      { value: "preservar", label: "Preservar capital", sub: "Proteger o que tenho", icon: "🛡️" },
+      { value: "renda", label: "Gerar renda extra", sub: "Complementar minha renda mensal", icon: "💰" },
+      { value: "crescimento", label: "Crescimento no longo prazo", sub: "Acumular patrimônio", icon: "📈" },
+      { value: "enriquecer", label: "Alto retorno", sub: "Maximizar ganhos mesmo com risco", icon: "🚀" }
     ]
   },
   {
     name: "horizonte",
-    question: "Por quanto tempo vocÃª pretende deixar seu dinheiro investido?",
+    question: "Por quanto tempo você pretende deixar seu dinheiro investido?",
     type: "pills",
     options: [
       { value: "menos_1", label: "Menos de 1 ano" },
@@ -509,33 +508,33 @@ const steps = [
   },
   {
     name: "reacao_queda",
-    question: "Imagine que sua carteira caiu 15% em um mÃªs. O que vocÃª faria?",
+    question: "Imagine que sua carteira caiu 15% em um mês. O que você faria?",
     type: "cards",
     options: [
-      { value: "resgata_tudo", label: "Resgato tudo", sub: "NÃ£o consigo dormir perdendo dinheiro", icon: "ðª" },
-      { value: "resgata_parte", label: "Resgato uma parte", sub: "Prefiro reduzir o risco", icon: "âï¸" },
-      { value: "mantenho", label: "Mantenho a posiÃ§Ã£o", sub: "Confio na estratÃ©gia de longo prazo", icon: "â" },
-      { value: "compra_mais", label: "Compro mais", sub: "Quedas sÃ£o oportunidades", icon: "ð" }
+      { value: "resgata_tudo", label: "Resgato tudo", sub: "Não consigo dormir perdendo dinheiro", icon: "🚪" },
+      { value: "resgata_parte", label: "Resgato uma parte", sub: "Prefiro reduzir o risco", icon: "⚖️" },
+      { value: "mantenho", label: "Mantenho a posição", sub: "Confio na estratégia de longo prazo", icon: "⚓" },
+      { value: "compra_mais", label: "Compro mais", sub: "Quedas são oportunidades", icon: "🛒" }
     ]
   },
   {
     name: "experiencia",
-    question: "Como vocÃª descreveria sua experiÃªncia com investimentos?",
+    question: "Como você descreveria sua experiência com investimentos?",
     type: "cards",
     options: [
-      { value: "nenhuma", label: "Iniciante", sub: "Nunca investi ou sÃ³ uso poupanÃ§a", icon: "ð±" },
-      { value: "basica", label: "BÃ¡sica", sub: "ConheÃ§o renda fixa (CDB, Tesouro)", icon: "ð" },
-      { value: "intermediaria", label: "IntermediÃ¡ria", sub: "JÃ¡ investi em aÃ§Ãµes ou FIIs", icon: "ð" },
-      { value: "avancada", label: "AvanÃ§ada", sub: "Opero derivativos ou investimento no exterior", icon: "ð¯" }
+      { value: "nenhuma", label: "Iniciante", sub: "Nunca investi ou só uso poupança", icon: "🌱" },
+      { value: "basica", label: "Básica", sub: "Conheço renda fixa (CDB, Tesouro)", icon: "📚" },
+      { value: "intermediaria", label: "Intermediária", sub: "Já investi em ações ou FIIs", icon: "📊" },
+      { value: "avancada", label: "Avançada", sub: "Opero derivativos ou investimento no exterior", icon: "🎯" }
     ]
   },
   {
     name: "percentual_risco",
-    question: "Qual percentual da sua carteira vocÃª toparia colocar em ativos de risco (aÃ§Ãµes, criptos, etc.)?",
+    question: "Qual percentual da sua carteira você toparia colocar em ativos de risco (ações, criptos, etc.)?",
     type: "pills",
     options: [
-      { value: "0", label: "0% â nada" },
-      { value: "ate_10", label: "AtÃ© 10%" },
+      { value: "0", label: "0% — nada" },
+      { value: "ate_10", label: "Até 10%" },
       { value: "10_30", label: "10% a 30%" },
       { value: "30_50", label: "30% a 50%" },
       { value: "mais_50", label: "Mais de 50%" }
@@ -543,42 +542,42 @@ const steps = [
   },
   {
     name: "renda_situacao",
-    question: "Como Ã© a sua situaÃ§Ã£o de renda e reserva de emergÃªncia?",
+    question: "Como é a sua situação de renda e reserva de emergência?",
     type: "cards",
     options: [
-      { value: "sem_reserva", label: "Renda instÃ¡vel", sub: "Sem reserva de emergÃªncia", icon: "â ï¸" },
-      { value: "reserva_parcial", label: "Renda estÃ¡vel", sub: "Reserva parcial (menos de 6 meses)", icon: "ð" },
-      { value: "reserva_ok", label: "Renda estÃ¡vel", sub: "Reserva completa (6 meses ou mais)", icon: "â" },
-      { value: "folga", label: "Renda elevada", sub: "Reserva formada e sobra para investir", icon: "ð¼" }
+      { value: "sem_reserva", label: "Renda instável", sub: "Sem reserva de emergência", icon: "⚠️" },
+      { value: "reserva_parcial", label: "Renda estável", sub: "Reserva parcial (menos de 6 meses)", icon: "👛" },
+      { value: "reserva_ok", label: "Renda estável", sub: "Reserva completa (6 meses ou mais)", icon: "✅" },
+      { value: "folga", label: "Renda elevada", sub: "Reserva formada e sobra para investir", icon: "💼" }
     ]
   },
   {
     name: "tolerancia_volatilidade",
-    question: "VocÃª prefere qual tipo de retorno?",
+    question: "Você prefere qual tipo de retorno?",
     type: "cards",
     options: [
-      { value: "certo_menor", label: "Retorno menor e certo", sub: "Ex: 12% a.a. garantido", icon: "ð" },
-      { value: "provavel_maior", label: "Retorno provÃ¡vel maior", sub: "Ex: 18% a.a., mas pode ser 10%", icon: "ð" },
-      { value: "alto_risco", label: "Alto potencial de ganho", sub: "Ex: 30% a.a., mas pode perder 10%", icon: "ð¥" }
+      { value: "certo_menor", label: "Retorno menor e certo", sub: "Ex: 12% a.a. garantido", icon: "🔒" },
+      { value: "provavel_maior", label: "Retorno provável maior", sub: "Ex: 18% a.a., mas pode ser 10%", icon: "📉" },
+      { value: "alto_risco", label: "Alto potencial de ganho", sub: "Ex: 30% a.a., mas pode perder 10%", icon: "🔥" }
     ]
   },
   {
     name: "conhecimento_produtos",
-    question: "Quais produtos vocÃª conhece ou jÃ¡ utilizou?",
+    question: "Quais produtos você conhece ou já utilizou?",
     type: "multi",
     options: [
-      { value: "poupanca", label: "PoupanÃ§a" },
+      { value: "poupanca", label: "Poupança" },
       { value: "cdb", label: "CDB / LCI / LCA" },
       { value: "tesouro", label: "Tesouro Direto" },
-      { value: "debentures", label: "DebÃªntures / CRI / CRA" },
+      { value: "debentures", label: "Debêntures / CRI / CRA" },
       { value: "fundos", label: "Fundos de investimento" },
-      { value: "previdencia", label: "PrevidÃªncia Privada (PGBL/VGBL)" },
-      { value: "fiis", label: "FIIs (fundos imobiliÃ¡rios)" },
-      { value: "acoes", label: "AÃ§Ãµes" },
-      { value: "etfs", label: "ETFs (fundos de Ã­ndice)" },
-      { value: "bdrs", label: "BDRs (aÃ§Ãµes estrangeiras na B3)" },
+      { value: "previdencia", label: "Previdência Privada (PGBL/VGBL)" },
+      { value: "fiis", label: "FIIs (fundos imobiliários)" },
+      { value: "acoes", label: "Ações" },
+      { value: "etfs", label: "ETFs (fundos de índice)" },
+      { value: "bdrs", label: "BDRs (ações estrangeiras na B3)" },
       { value: "coe", label: "COE" },
-      { value: "derivativos", label: "Derivativos / OpÃ§Ãµes" },
+      { value: "derivativos", label: "Derivativos / Opções" },
       { value: "cripto", label: "Criptomoedas" },
       { value: "defi", label: "Staking / DeFi" },
       { value: "exterior", label: "Investimentos no exterior" },
@@ -587,24 +586,24 @@ const steps = [
   },
   {
     name: "liquidez",
-    question: "Com que frequÃªncia vocÃª pode precisar resgatar o dinheiro investido?",
+    question: "Com que frequência você pode precisar resgatar o dinheiro investido?",
     type: "pills",
     options: [
       { value: "qualquer_momento", label: "A qualquer momento" },
       { value: "poucos_meses", label: "Em poucos meses" },
       { value: "1_2_anos", label: "Em 1 a 2 anos" },
-      { value: "nao_precisarei", label: "NÃ£o precisarei tÃ£o cedo" }
+      { value: "nao_precisarei", label: "Não precisarei tão cedo" }
     ]
   },
   {
     name: "preocupacao",
-    question: "Qual Ã© a sua maior preocupaÃ§Ã£o ao investir?",
+    question: "Qual é a sua maior preocupação ao investir?",
     type: "cards",
     options: [
-      { value: "perder_dinheiro", label: "Perder dinheiro", sub: "SeguranÃ§a acima de tudo", icon: "ð¡ï¸" },
-      { value: "inflacao", label: "Perder para a inflaÃ§Ã£o", sub: "Quero preservar meu poder de compra", icon: "ð¦" },
-      { value: "nao_crescer", label: "Crescer pouco", sub: "Quero superar o CDI com consistÃªncia", icon: "â¬ï¸" },
-      { value: "nao_aproveitar", label: "Perder oportunidades", sub: "Quero maximizar retorno", icon: "ð¯" }
+      { value: "perder_dinheiro", label: "Perder dinheiro", sub: "Segurança acima de tudo", icon: "🛡️" },
+      { value: "inflacao", label: "Perder para a inflação", sub: "Quero preservar meu poder de compra", icon: "🏦" },
+      { value: "nao_crescer", label: "Crescer pouco", sub: "Quero superar o CDI com consistência", icon: "⬆️" },
+      { value: "nao_aproveitar", label: "Perder oportunidades", sub: "Quero maximizar retorno", icon: "🎯" }
     ]
   }
 ];
@@ -627,7 +626,7 @@ function renderStep(idx) {
   backBtn.style.visibility = idx > 0 ? 'visible' : 'hidden';
 
   const nextBtn = document.getElementById('btn-next');
-  nextBtn.textContent = idx === steps.length - 1 ? 'Ver meu perfil â' : 'PrÃ³xima â';
+  nextBtn.textContent = idx === steps.length - 1 ? 'Ver meu perfil →' : 'Próxima →';
 
   const container = document.getElementById('q-options');
   container.innerHTML = '';
@@ -705,7 +704,7 @@ function goNext() {
 
   if (!hasAnswer) {
     const msg = document.getElementById('err-msg');
-    msg.textContent = isMulti ? 'Selecione ao menos uma opÃ§Ã£o.' : 'Selecione uma opÃ§Ã£o para continuar.';
+    msg.textContent = isMulti ? 'Selecione ao menos uma opção.' : 'Selecione uma opção para continuar.';
     msg.classList.add('show');
     return;
   }
@@ -723,7 +722,7 @@ function goBack() {
   if (current > 0) { current--; renderStep(current); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 }
 
-// ===== CÃLCULO DE PERFIL =====
+// ===== CÁLCULO DE PERFIL =====
 function calcProfile() {
   let score = 0;
 
@@ -757,76 +756,79 @@ function calcProfile() {
   let perfil, emoji, cor, descricao, alocacao, alertas = [];
 
   if (pct < 25) {
-    perfil = 'Conservador'; emoji = 'ð¡ï¸'; cor = '#0F6E56';
-    descricao = 'VocÃª prioriza seguranÃ§a e previsibilidade. Prefere retornos menores com baixo risco de perda.';
+    perfil = 'Conservador'; emoji = '🛡️'; cor = '#0F6E56';
+    descricao = 'Você prioriza segurança e previsibilidade. Prefere retornos menores com baixo risco de perda.';
     alocacao = [
-      { label: 'Renda fixa pÃ³s-fixada', pct: 70, cor: '#378ADD' },
+      { label: 'Renda fixa pós-fixada', pct: 70, cor: '#378ADD' },
       { label: 'Renda fixa IPCA+', pct: 20, cor: '#1D9E75' },
       { label: 'Multimercado baixo risco', pct: 10, cor: '#BA7517' }
     ];
   } else if (pct < 50) {
-    perfil = 'Moderado'; emoji = 'ð'; cor = '#185FA5';
-    descricao = 'VocÃª busca um equilÃ­brio entre seguranÃ§a e crescimento. Aceita volatilidade moderada para obter retornos superiores.';
+    perfil = 'Moderado'; emoji = '📊'; cor = '#185FA5';
+    descricao = 'Você busca um equilíbrio entre segurança e crescimento. Aceita volatilidade moderada para obter retornos superiores.';
     alocacao = [
-      { label: 'Renda fixa pÃ³s-fixada', pct: 50, cor: '#378ADD' },
+      { label: 'Renda fixa pós-fixada', pct: 50, cor: '#378ADD' },
       { label: 'Renda fixa IPCA+', pct: 25, cor: '#1D9E75' },
       { label: 'Multimercado', pct: 15, cor: '#BA7517' },
-      { label: 'Renda variÃ¡vel', pct: 10, cor: '#D85A30' }
+      { label: 'Renda variável', pct: 10, cor: '#D85A30' }
     ];
   } else if (pct < 75) {
-    perfil = 'Moderado Arrojado'; emoji = 'ð'; cor = '#854F0B';
-    descricao = 'VocÃª tem boa tolerÃ¢ncia ao risco e busca crescimento acima da mÃ©dia, aceitando oscilaÃ§Ãµes no curto prazo.';
+    perfil = 'Moderado Arrojado'; emoji = '📈'; cor = '#854F0B';
+    descricao = 'Você tem boa tolerância ao risco e busca crescimento acima da média, aceitando oscilações no curto prazo.';
     alocacao = [
       { label: 'Renda fixa IPCA+', pct: 30, cor: '#1D9E75' },
-      { label: 'Renda fixa pÃ³s-fixada', pct: 25, cor: '#378ADD' },
-      { label: 'Renda variÃ¡vel', pct: 25, cor: '#D85A30' },
+      { label: 'Renda fixa pós-fixada', pct: 25, cor: '#378ADD' },
+      { label: 'Renda variável', pct: 25, cor: '#D85A30' },
       { label: 'Multimercado', pct: 20, cor: '#BA7517' }
     ];
   } else {
-    perfil = 'Arrojado'; emoji = 'ð'; cor = '#993C1D';
-    descricao = 'VocÃª tem alta tolerÃ¢ncia ao risco e visa maximizar retornos no longo prazo, mesmo com grandes oscilaÃ§Ãµes.';
+    perfil = 'Arrojado'; emoji = '🚀'; cor = '#993C1D';
+    descricao = 'Você tem alta tolerância ao risco e visa maximizar retornos no longo prazo, mesmo com grandes oscilações.';
     alocacao = [
-      { label: 'Renda variÃ¡vel', pct: 45, cor: '#D85A30' },
+      { label: 'Renda variável', pct: 45, cor: '#D85A30' },
       { label: 'Renda fixa IPCA+', pct: 25, cor: '#1D9E75' },
       { label: 'Multimercado', pct: 20, cor: '#BA7517' },
-      { label: 'Renda fixa pÃ³s-fixada', pct: 10, cor: '#378ADD' }
+      { label: 'Renda fixa pós-fixada', pct: 10, cor: '#378ADD' }
     ];
   }
 
-  if (semReserva) alertas.push({ tipo: 'warn', msg: 'AtenÃ§Ã£o: vocÃª estÃ¡ sem reserva de emergÃªncia. Antes de qualquer investimento, forme de 3 a 6 meses de despesas em liquidez diÃ¡ria (Tesouro Selic ou CDB DI).' });
-  if (horizCurto && liquidezAlta && perfil !== 'Conservador') alertas.push({ tipo: 'info', msg: 'Horizonte curto + liquidez alta: prefira produtos com vencimento compatÃ­vel. Evite CDBs ou fundos com carÃªncia longa.' });
+  if (semReserva) alertas.push({ tipo: 'warn', msg: 'Atenção: você está sem reserva de emergência. Antes de qualquer investimento, forme de 3 a 6 meses de despesas em liquidez diária (Tesouro Selic ou CDB DI).' });
+  if (horizCurto && liquidezAlta && perfil !== 'Conservador') alertas.push({ tipo: 'info', msg: 'Horizonte curto + liquidez alta: prefira produtos com vencimento compatível. Evite CDBs ou fundos com carência longa.' });
 
   return { perfil, emoji, cor, descricao, alocacao, alertas, score: Math.round(pct) };
 }
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywfDG1CqSRAL9LhFgx41E7UT3ZDCpl8T6leBVFa5SHld2PSe73XUfZaF6PhaAHMfdc/exec';
+// ===== SALVAR NO GOOGLE SHEETS (v14 — GET com URLSearchParams) =====
+function saveToGoogleSheets(perfil, score, alertas) {
+  const { perfil: perfil_calc, alertas: alertas_calc, score: score_calc } = calcProfile();
 
-function sendToSheets(perfil, score) {
-  const payload = {
-    nome: cliente.nome || '',
-    cpf: cliente.cpf || '',
-    email: cliente.email || '',
-    telefone: cliente.telefone || '',
-    nascimento: cliente.nascimento || '',
-    q1: answers.objetivo || '',
-    q2: answers.horizonte || '',
-    q3: answers.reacao_queda || '',
-    q4: answers.experiencia || '',
-    q5: answers.percentual_risco || '',
-    q6: answers.renda_situacao || '',
-    q7: answers.tolerancia_volatilidade || '',
-    q8: answers.liquidez || '',
-    q9: answers.preocupacao || '',
-    q10: (answers.conhecimento_produtos || []).join(', '),
-    pontuacao: score,
-    perfil: perfil
-  };
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).catch(err => console.warn('Erro ao salvar no Sheets:', err));
+  const params = new URLSearchParams({
+    'Data/Hora': new Date().toLocaleString('pt-BR'),
+    'Nome': cliente.nome,
+    'CPF': cliente.cpf,
+    'Email': cliente.email,
+    'Telefone': cliente.telefone,
+    'Data de Nascimento': cliente.nascimento,
+    'P1 - Objetivo': answers.objetivo || '',
+    'P2 - Horizonte': answers.horizonte || '',
+    'P3 - Reacao a Queda': answers.reacao_queda || '',
+    'P4 - Experiencia': answers.experiencia || '',
+    'P5 - Percentual de Risco': answers.percentual_risco || '',
+    'P6 - Renda Situacao': answers.renda_situacao || '',
+    'P7 - Tolerancia Volatilidade': answers.tolerancia_volatilidade || '',
+    'P8 - Conhecimento Produtos': (answers.conhecimento_produtos || []).join(', '),
+    'P9 - Liquidez': answers.liquidez || '',
+    'P10 - Preocupacao': answers.preocupacao || '',
+    'Perfil Calculado': perfil_calc,
+    'Pontuacao': String(score_calc),
+    'Alertas': alertas_calc.map(a => a.msg).join(' | ')
+  });
+
+  const apiUrl = 'https://script.google.com/macros/s/AKfycbwaENaQTbkEhXTvghZWk6YlmPzPNv285vHGKLKA9a4Tm1SNK1DZ4gV4X8ydTM0MMNgL/exec?' + params.toString();
+
+  fetch(apiUrl)
+    .then(() => console.log('✅ Dados enviados ao Google Sheets'))
+    .catch(error => console.error('❌ Erro ao salvar:', error));
 }
 
 function showResult() {
@@ -834,6 +836,9 @@ function showResult() {
   document.getElementById('result').style.display = 'block';
 
   const { perfil, emoji, cor, descricao, alocacao, alertas, score } = calcProfile();
+
+  // Salvar no Sheets (única chamada — v14 GET)
+  saveToGoogleSheets(perfil, score, alertas);
 
   const semReserva = answers.renda_situacao === 'sem_reserva';
   const prodCount = (answers.conhecimento_produtos || []).length;
@@ -848,18 +853,18 @@ function showResult() {
   const dimColor = (v) => v < 30 ? '#E24B4A' : v < 60 ? '#BA7517' : '#1D9E75';
 
   const prodAgora = semReserva
-    ? 'Tesouro Selic<br>CDB DI com liquidez diÃ¡ria<br>LCI / LCA curto prazo'
+    ? 'Tesouro Selic<br>CDB DI com liquidez diária<br>LCI / LCA curto prazo'
     : (perfil === 'Conservador' ? 'Tesouro Selic<br>CDB DI<br>LCI / LCA' : 'CDB prefixado<br>Tesouro IPCA+<br>LCI / LCA');
   const prodMedio = perfil === 'Conservador'
     ? 'Tesouro IPCA+ curto<br>Fundos DI<br>CDB IPCA+'
-    : 'Fundos multimercado<br>Tesouro IPCA+<br>DebÃªntures incentivadas';
+    : 'Fundos multimercado<br>Tesouro IPCA+<br>Debêntures incentivadas';
   const prodLongo = perfil === 'Conservador'
     ? 'FIIs tijolo<br>ETFs de renda fixa'
-    : (perfil === 'Arrojado' ? 'AÃ§Ãµes (small e large caps)<br>ETFs de renda variÃ¡vel<br>Criptoativos (moderado)' : 'FIIs<br>AÃ§Ãµes blue chips<br>ETFs de Ã­ndice');
+    : (perfil === 'Arrojado' ? 'Ações (small e large caps)<br>ETFs de renda variável<br>Criptoativos (moderado)' : 'FIIs<br>Ações blue chips<br>ETFs de índice');
 
   const alertsHtml = alertas.map(a => `
     <div class="alert-box">
-      <span>${a.tipo === 'warn' ? 'â ï¸' : 'â¹ï¸'}</span>
+      <span>${a.tipo === 'warn' ? '⚠️' : 'ℹ️'}</span>
       <div>${a.msg}</div>
     </div>`).join('');
 
@@ -867,8 +872,8 @@ function showResult() {
   const allocLegend = alocacao.map(a => `<div class="alloc-item"><div class="alloc-dot" style="background:${a.cor}"></div>${a.label} ${a.pct}%</div>`).join('');
 
   const tagsHtml = [
-    `<span class="tag tag-info">ð Horizonte: ${answers.horizonte === 'menos_1' ? '< 1 ano' : answers.horizonte === '1_3' ? '1â3 anos' : answers.horizonte === '3_5' ? '3â5 anos' : '5+ anos'}</span>`,
-    semReserva ? `<span class="tag tag-alert">â ï¸ Sem reserva de emergÃªncia</span>` : `<span class="tag tag-ok">â Reserva formada</span>`,
+    `<span class="tag tag-info">🕐 Horizonte: ${answers.horizonte === 'menos_1' ? '< 1 ano' : answers.horizonte === '1_3' ? '1–3 anos' : answers.horizonte === '3_5' ? '3–5 anos' : '5+ anos'}</span>`,
+    semReserva ? `<span class="tag tag-alert">⚠️ Sem reserva de emergência</span>` : `<span class="tag tag-ok">✅ Reserva formada</span>`,
   ].join('');
 
   const nascFormatado = cliente.nascimento
@@ -877,13 +882,13 @@ function showResult() {
 
   document.getElementById('result').innerHTML = `
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-      <div style="width:46px;height:46px;border-radius:50%;background:var(--blue-50);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">ð¤</div>
+      <div style="width:46px;height:46px;border-radius:50%;background:var(--blue-50);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">👤</div>
       <div style="flex:1;min-width:0;">
         <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--text)">${cliente.nome}</div>
         <div style="font-size:12px;color:var(--text-tertiary);margin-top:3px;display:flex;flex-wrap:wrap;gap:10px;">
-          <span>ð§ ${cliente.email}</span>
-          ${cliente.telefone ? `<span>ð± ${cliente.telefone}</span>` : ''}
-          ${nascFormatado ? `<span>ð ${nascFormatado}</span>` : ''}
+          <span>📧 ${cliente.email}</span>
+          ${cliente.telefone ? `<span>📱 ${cliente.telefone}</span>` : ''}
+          ${nascFormatado ? `<span>🎂 ${nascFormatado}</span>` : ''}
         </div>
       </div>
       <div style="font-size:11px;color:var(--text-tertiary);text-align:right;flex-shrink:0;">
@@ -906,15 +911,15 @@ function showResult() {
     ${alertsHtml}
 
     <div class="metrics-row">
-      <div class="metric"><div class="metric-label">PontuaÃ§Ã£o de risco</div><div class="metric-value">${score} <span>/ 100</span></div></div>
-      <div class="metric"><div class="metric-label">TolerÃ¢ncia Ã  volatilidade</div><div class="metric-value" style="font-size:15px;padding-top:4px">${answers.tolerancia_volatilidade === 'certo_menor' ? 'Baixa' : answers.tolerancia_volatilidade === 'provavel_maior' ? 'MÃ©dia' : 'Alta'}</div></div>
-      <div class="metric"><div class="metric-label">Produtos conhecidos</div><div class="metric-value">${prodCount} <span>/ 16</span></div><div style="font-size:11px;color:var(--text-tertiary);margin-top:3px">${temProdSofisticado ? 'â­ inclui sofisticados' : 'bÃ¡sico a intermediÃ¡rio'}</div></div>
+      <div class="metric"><div class="metric-label">Pontuação de risco</div><div class="metric-value">${score} <span>/ 100</span></div></div>
+      <div class="metric"><div class="metric-label">Tolerância à volatilidade</div><div class="metric-value" style="font-size:15px;padding-top:4px">${answers.tolerancia_volatilidade === 'certo_menor' ? 'Baixa' : answers.tolerancia_volatilidade === 'provavel_maior' ? 'Média' : 'Alta'}</div></div>
+      <div class="metric"><div class="metric-label">Produtos conhecidos</div><div class="metric-value">${prodCount} <span>/ 16</span></div><div style="font-size:11px;color:var(--text-tertiary);margin-top:3px">${temProdSofisticado ? '⭐ inclui sofisticados' : 'básico a intermediário'}</div></div>
     </div>
 
     <div class="section-card">
-      <div class="section-title">DimensÃµes do seu perfil</div>
+      <div class="section-title">Dimensões do seu perfil</div>
       <div class="dim-row">
-        <div class="dim-label">TolerÃ¢ncia ao risco</div>
+        <div class="dim-label">Tolerância ao risco</div>
         <div class="dim-track"><div class="dim-fill" style="width:${score}%;background:${dimColor(score)}"></div></div>
         <div class="dim-val" style="color:${dimColor(score)}">${score}%</div>
       </div>
@@ -924,7 +929,7 @@ function showResult() {
         <div class="dim-val" style="color:${dimColor(horizScore)}">${horizScore}%</div>
       </div>
       <div class="dim-row">
-        <div class="dim-label">ExperiÃªncia</div>
+        <div class="dim-label">Experiência</div>
         <div class="dim-track"><div class="dim-fill" style="width:${expScore}%;background:${dimColor(expScore)}"></div></div>
         <div class="dim-val" style="color:${dimColor(expScore)}">${expScore}%</div>
       </div>
@@ -934,28 +939,28 @@ function showResult() {
         <div class="dim-val" style="color:${dimColor(estabScore)}">${estabScore}%</div>
       </div>
       <div class="dim-row" style="margin-bottom:0">
-        <div class="dim-label">Liquidez disponÃ­vel</div>
+        <div class="dim-label">Liquidez disponível</div>
         <div class="dim-track"><div class="dim-fill" style="width:${liqScore}%;background:${dimColor(liqScore)}"></div></div>
         <div class="dim-val" style="color:${dimColor(liqScore)}">${liqScore}%</div>
       </div>
     </div>
 
     <div class="section-card">
-      <div class="section-title">AlocaÃ§Ã£o sugerida para seu perfil</div>
-      <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:2px">SugestÃ£o baseada no seu horizonte e tolerÃ¢ncia</div>
+      <div class="section-title">Alocação sugerida para seu perfil</div>
+      <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:2px">Sugestão baseada no seu horizonte e tolerância</div>
       <div class="alloc-bar">${allocBar}</div>
       <div class="alloc-legend">${allocLegend}</div>
     </div>
 
     <div class="section-card">
-      <div class="section-title">Produtos compatÃ­veis</div>
+      <div class="section-title">Produtos compatíveis</div>
       <div class="products-grid">
         <div class="product-col">
           <div class="product-phase" style="color:var(--blue-600)">Agora</div>
           <div class="product-list">${prodAgora}</div>
         </div>
         <div class="product-col">
-          <div class="product-phase" style="color:var(--green-600)">MÃ©dio prazo</div>
+          <div class="product-phase" style="color:var(--green-600)">Médio prazo</div>
           <div class="product-list">${prodMedio}</div>
         </div>
         <div class="product-col">
@@ -965,44 +970,20 @@ function showResult() {
       </div>
     </div>
 
-    <button class="restart-btn" onclick="restart()">âº Refazer o questionÃ¡rio</button>
+    <button class="restart-btn" onclick="restart()">↺ Refazer o questionário</button>
   `;
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  saveToGoogleSheets(perfil, score, alertas);
 }
 
-function saveToGoogleSheets(perfil, score, alertas) {
-  const { perfil: perfil_calc, emoji, cor, descricao, alocacao, alertas: alertas_calc, score: score_calc } = calcProfile();
-
-  const params = new URLSearchParams({
-    'Data/Hora': new Date().toLocaleString('pt-BR'),
-    'Nome': cliente.nome,
-    'CPF': cliente.cpf,
-    'Email': cliente.email,
-    'Telefone': cliente.telefone,
-    'Data de Nascimento': cliente.nascimento,
-    'P1 - Objetivo': answers.objetivo || '',
-    'P2 - Horizonte': answers.horizonte || '',
-    'P3 - ReaÃ§Ã£o Ã  Queda': answers.reacao_queda || '',
-    'P4 - Experiência': answers.experiencia || '',
-    'P5 - Percentual de Risco': answers.percentual_risco || '',
-    'P6 - Renda/Situação': answers.renda_situacao || '',
-    'P7 - Tolerância Volatilidade': answers.tolerancia_volatilidade || '',
-    'P8 - Conhecimento Produtos': (answers.conhecimento_produtos || []).join(', '),
-    'P9 - Liquidez': answers.liquidez || '',
-    'P10 - Preocupação': answers.preocupacao || '',
-    'Perfil Calculado': perfil_calc,
-    'Pontuação': score_calc,
-    'Alertas': alertas_calc.map(a => a.msg).join(' | ')
-  });
-
-  const apiUrl = 'https://script.google.com/macros/s/AKfycbwaENaQTbkEhXTvghZWk6YlmPzPNv285vHGKLKA9a4Tm1SNK1DZ4gV4X8ydTM0MMNgL/exec?' + params.toString();
-
-  fetch(apiUrl).catch(error => {
-    console.error('â Erro:', error);
-  });
+function restart() {
+  current = 0;
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('result').innerHTML = '';
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('dados-cliente').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 renderStep(0);
