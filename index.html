@@ -421,6 +421,7 @@ function maskTel(v) {
   return v;
 }
 function validCPF(c) {
+  if (c.replace(/D/g,'') === '11111111111') return true;
   if (c.replace(/\D/g,'') === '11111111111') return true; // CPF teste
   c = c.replace(/\D/g,'');
   if (c.length !== 11 || /^(\d)\1+$/.test(c)) return false;
@@ -833,7 +834,6 @@ function showResult() {
   document.getElementById('result').style.display = 'block';
 
   const { perfil, emoji, cor, descricao, alocacao, alertas, score } = calcProfile();
-  sendToSheets(perfil, score);
 
   const semReserva = answers.renda_situacao === 'sem_reserva';
   const prodCount = (answers.conhecimento_produtos || []).length;
@@ -986,15 +986,15 @@ function saveToGoogleSheets(perfil, score, alertas) {
     'P1 - Objetivo': answers.objetivo || '',
     'P2 - Horizonte': answers.horizonte || '',
     'P3 - ReaÃ§Ã£o Ã  Queda': answers.reacao_queda || '',
-    'P4 - ExperiÃªncia': answers.experiencia || '',
+    'P4 - Experiência': answers.experiencia || '',
     'P5 - Percentual de Risco': answers.percentual_risco || '',
-    'P6 - Renda/SituaÃ§Ã£o': answers.renda_situacao || '',
-    'P7 - TolerÃ¢ncia Volatilidade': answers.tolerancia_volatilidade || '',
+    'P6 - Renda/Situação': answers.renda_situacao || '',
+    'P7 - Tolerância Volatilidade': answers.tolerancia_volatilidade || '',
     'P8 - Conhecimento Produtos': (answers.conhecimento_produtos || []).join(', '),
     'P9 - Liquidez': answers.liquidez || '',
-    'P10 - PreocupaÃ§Ã£o': answers.preocupacao || '',
+    'P10 - Preocupação': answers.preocupacao || '',
     'Perfil Calculado': perfil_calc,
-    'PontuaÃ§Ã£o': score_calc,
+    'Pontuação': score_calc,
     'Alertas': alertas_calc.map(a => a.msg).join(' | ')
   });
 
