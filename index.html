@@ -824,7 +824,7 @@ function saveToGoogleSheets(perfil, score, alertas) {
     'Alertas': alertas_calc.map(a => a.msg).join(' | ')
   });
 
-  const apiUrl = 'https://script.google.com/macros/s/AKfycbwaENaQTbkEhXTvghZWk6YlmPzPNv285vHGKLKA9a4Tm1SNK1DZ4gV4X8ydTM0MMNgL/exec?' + params.toString();
+  const apiUrl = 'https://script.google.com/macros/s/AKfycbx1bEzWwfLrbgZ0KqSJG7pqGLG8ZLueHWCCt2YaQI5z23p5WGB9g61pYZmW-VAjbCSc/exec?' + params.toString();
 
   fetch(apiUrl)
     .then(() => console.log('✅ Dados enviados ao Google Sheets'))
