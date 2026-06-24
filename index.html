@@ -975,7 +975,7 @@ function showResult() {
 function saveToGoogleSheets(perfil, score, alertas) {
   const { perfil: perfil_calc, emoji, cor, descricao, alocacao, alertas: alertas_calc, score: score_calc } = calcProfile();
 
-  const dados = {
+  const params = new URLSearchParams({
     'Data/Hora': new Date().toLocaleString('pt-BR'),
     'Nome': cliente.nome,
     'CPF': cliente.cpf,
@@ -995,27 +995,14 @@ function saveToGoogleSheets(perfil, score, alertas) {
     'Perfil Calculado': perfil_calc,
     'Pontuação': score_calc,
     'Alertas': alertas_calc.map(a => a.msg).join(' | ')
-  };
+  });
 
-  const apiUrl = 'https://script.google.com/macros/s/AKfycbxWdVDLQmUJtRqGN6VsFKTDe_rK-TgvGmDM2dQXHDhFF-ZAr4G-XVf3gcuPPYOMDsOE/exec';
+  const apiUrl = 'https://script.google.com/macros/s/AKfycbxFor1U1kttBSvOjZQbYAc-RAlhjiKoAcZkQlwYBuMyIGwLU1eWLotUQo5ckFn272dA/exec?' + params.toString();
 
-  fetch(apiUrl, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: JSON.stringify(dados)
-  }).catch(error => {
+  fetch(apiUrl).catch(error => {
     console.error('❌ Erro:', error);
   });
 }
-
-function restart() {
-  current = 0;
-  Object.keys(answers).forEach(k => delete answers[k]);
-  document.getElementById('result').style.display = 'none';
-  document.getElementById('result').innerHTML = '';
-  document.getElementById('quiz').style.display = 'none';
-  document.getElementById('dados-cliente').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 renderStep(0);
