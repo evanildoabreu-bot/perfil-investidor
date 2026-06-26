@@ -682,7 +682,7 @@ function saveToGoogleSheets(perfil, score, alertas) {
     'Perfil Calculado': perfil_calc, 'Pontuacao': String(score_calc),
     'Alertas': alertas_calc.map(a => a.msg).join(' | ')
   });
-  const apiUrl = 'https://script.google.com/macros/s/AKfycbx1bEzWwfLrbgZ0KqSJG7pqGLG8ZLueHWCCt2YaQI5z23p5WGB9g61pYZmW-VAjbCSc/exec?' + params.toString();
+  const apiUrl = 'https://script.google.com/macros/s/AKfycbyKrvAYj4Hp51lzQp-wdpCoCpMxlV61f2Acl4ltyHjYT6XDe0mScnKq_JNHyvWcpdzw/exec?' + params.toString();
   fetch(apiUrl).then(() => console.log('✅ Dados enviados')).catch(e => console.error('❌', e));
 }
 
